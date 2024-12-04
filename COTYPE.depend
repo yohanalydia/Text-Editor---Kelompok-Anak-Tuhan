@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1732625114 source:d:\kuliah\tugas\semester 3\struktur data\cotype\main.cpp
+	"COTYPE.h"
+
+1732630001 d:\kuliah\tugas\semester 3\struktur data\cotype\cotype.h
+	<iostream>
+
+1732629662 source:d:\kuliah\tugas\semester 3\struktur data\cotype\cotype.cpp
+	"COTYPE.h"
+
