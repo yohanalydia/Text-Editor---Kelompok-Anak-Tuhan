@@ -113,106 +113,76 @@ void moveCursorToLeft(adrHuruf &cursor){
 
 void moveCursorUp(adrHuruf &cursor){
 //{I.S terdefinisi sebuah pointer kursor yang tidak kosong.
-// F.S elemen kursor keluar pindah ke posisi terakhir baris di atasnya.
+// F.S elemen kursor pindah ke posisi yang sama di baris atasnya atau posisi terakhir jika jumlah huruf di baris atasnya lebih sedikit.}
+
     if(activeBaris != Line.first){
-        int jumlahKata =0;
+        bool found = false;
         int jumlahHuruf = 0;
         adrKata counterKata;
         adrHuruf counterHuruf;
 
-        int jumlahKataPrev =0;
-        int jumlahHurufPrev = 0;
-        adrKata counterKataPrev;
-        adrHuruf counterHurufPrev;
-
         counterKata = activeBaris -> firstKata;
-        while(counterKata != activeKata){
-            jumlahKata++;
-            counterKata = counterKata -> next;
-        }
 
-        counterHuruf = activeKata -> firstHuruf;
-        while(counterHuruf -> info != '|'){
-            jumlahHuruf++;
-            counterHuruf = counterHuruf -> next;
-        }
-        counterKataPrev = activeBaris -> firstKata;
-        while(counterKataPrev != nullptr){
-            jumlahKataPrev++;
-            counterKataPrev = counterKataPrev -> next;
-        }
-
-        counterHurufPrev = activeKata -> firstHuruf;
-        while(counterHurufPrev != nullptr){
-            jumlahHurufPrev++;
-            counterHurufPrev = counterHurufPrev -> next;
-        }
-
-        if (counterHuruf > counterHurufPrev || counterKata > counterKataPrev){
-            deleteCursor(cursor);
-            activeBaris = activeBaris -> prev;
-            activeKata = activeBaris -> lastKata;
-            insertLastHuruf(cursor);
-        }else{
-            deleteCursor(cursor);
-            activeBaris = activeBaris -> prev;
-            activeKata = activeBaris -> firstKata;
-            for(int i = 1; i<= jumlahKata; i++){
-                activeKata = activeKata -> next;
+        while (counterKata != nullptr && !found){
+            counterHuruf = counterKata -> firstHuruf;
+            while (counterHuruf != nullptr && counterHuruf -> info !='|'){
+                jumlahHuruf++;
+                counterHuruf = counterHuruf -> next;
             }
-            adrHuruf tempKata = activeKata -> firstHuruf;
-            for(int i = 1;i< jumlahHuruf;i++){
-                if(tempKata -> next == nullptr){
-                    activeKata = activeKata -> next;
-                    tempKata = activeKata -> firstHuruf;
-                }else{
-                    tempKata = tempKata -> next;
-                }
+            if (counterHuruf == nullptr){
+                counterKata = counterKata -> next;
+            }else if (counterHuruf->info == '|'){
+                found = true;
             }
-            insertAfterHuruf(cursor, tempKata);
-
         }
+        deleteCursor(cursor);
 
+        activeBaris = activeBaris -> prev;
+        activeKata = activeBaris->firstKata;
+        insertFirstHuruf(cursor);
+
+        int i = 1;
+        while (i<=jumlahHuruf && cursor != activeBaris->lastKata->lastHuruf){
+            moveCursorToRight(cursor);
+            i++;
+        }
     }
 }
 
 void moveCursorDown(adrHuruf &cursor){
 //{I.S terdefinisi sebuah pointer kursor yang tidak kosong.
-// F.S elemen kursor keluar pindah ke posisi terakhir baris di bawahnya.
-    if(activeBaris != Line.last){
-        int jumlahKata =0;
+// F.S elemen kursor pindah ke posisi yang sama di baris bawahnya atau posisi terakhir jika jumlah huruf di baris bawahnya lebih sedikit.}
+    if (activeBaris != Line.last){
+        bool found = false;
         int jumlahHuruf = 0;
         adrKata counterKata;
         adrHuruf counterHuruf;
 
         counterKata = activeBaris -> firstKata;
-        while(counterKata != activeKata){
-            jumlahKata++;
-            counterKata = counterKata -> next;
-        }
 
-        counterHuruf = activeKata -> firstHuruf;
-        while(counterHuruf -> info != '|'){
-            jumlahHuruf++;
-            counterHuruf = counterHuruf -> next;
-        }
-
-        deleteCursor(cursor);
-        activeBaris = activeBaris -> next;
-        activeKata = activeBaris -> firstKata;
-        for(int i = 1; i<= jumlahKata; i++){
-            activeKata = activeKata -> next;
-        }
-        adrHuruf tempKata = activeKata -> firstHuruf;
-        for(int i = 1;i< jumlahHuruf;i++){
-            if(tempKata -> next == nullptr){
-                activeKata = activeKata -> next;
-                tempKata = activeKata -> firstHuruf;
-            }else{
-                tempKata = tempKata -> next;
+        while (counterKata != nullptr && !found){
+            counterHuruf = counterKata -> firstHuruf;
+            while (counterHuruf != nullptr && counterHuruf -> info !='|'){
+                jumlahHuruf++;
+                counterHuruf = counterHuruf -> next;
+            }
+            if (counterHuruf == nullptr){
+                counterKata = counterKata -> next;
+            }else if (counterHuruf->info == '|'){
+                found = true;
             }
         }
-        insertAfterHuruf(cursor, tempKata);
+        deleteCursor(cursor);
+
+        activeBaris = activeBaris -> next;
+        activeKata = activeBaris->firstKata;
+        insertFirstHuruf(cursor);
+
+        int i = 1;
+        while (i<=jumlahHuruf && cursor != activeBaris->lastKata->lastHuruf){
+            moveCursorToRight(cursor);
+            i++;
+        }
     }
 }
 
