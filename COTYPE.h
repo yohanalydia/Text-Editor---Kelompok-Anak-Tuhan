@@ -43,6 +43,9 @@ extern adrBaris activeBaris;
 // Mendeklarasikan variabel global Line
 extern Baris Line;
 
+extern adrBaris Clipboard;
+
+
 // Mendeklarasikan primitives create
 Baris createBaris();
 adrBaris createElemBaris();
@@ -90,10 +93,20 @@ void moveCursorToRight(adrHuruf &cursor);
 void moveCursorUp(adrHuruf &cursor);
 void moveCursorDown(adrHuruf &cursor);
 
+// Mendeklarasikan prosedur untuk mengubah karakter yang telah dipilih menjadi huruf kapital
+void characterToUppercase(adrHuruf cursor, int jumlahSelect);
+// Mendeklarasikan prosedur untuk mengubah karakter yang telah dipilih menjadi huruf kecil
+void characterToLowercase(adrHuruf cursor, int jumlahSelect);
+
+//Mendeklarasikan prosedur untuk menyeleksi karakter pada baris yang aktif
+void selectHuruf(adrHuruf cursor, int &jumlahSelect);
+// Mendeklarasikan prosedur untuk menyalin karakter yang sudah diseleksi
+void copyHuruf(adrHuruf cursor, int jumlahSelect);
 // Mendeklarasikan prosedur untuk menampilkan keterangan dari keseluruhan teks
 void keteranganText();
 // Mendeklarasikan prosedur untuk menampilkan keseluruhan teks
 void displayKata();
+// Mendeklarasikan prosedur untuk mengubah warna teks dan latar belakang teks
 void setColor(int textColor, int bgColor);
 
 

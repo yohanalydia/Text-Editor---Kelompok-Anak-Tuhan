@@ -4,7 +4,7 @@
 adrKata activeKata = nullptr;
 adrBaris activeBaris = nullptr;
 Baris Line = {nullptr, nullptr};
-
+adrBaris Clipboard = nullptr;
 
 Baris createBaris(){
 //{Mengembalikan sebuah baris dengan first dan last diinisialisasi sebagai NIL}
@@ -190,12 +190,31 @@ void inputHandler(adrHuruf &cursor, char x){
 //{I.S terdefinisi sebuah pointer kursor yang tidak kosong dan karakter input x
 // F.S karakter input ditangani sesuai kondisinya.}
     adrHuruf outHuruf;
+    int jumlahSelect;
     if (x == 32){ // kondisi karakter yang diinput adalah space
         inputSpace(cursor, x);
     }else if (x == 13){ // kondisi karakter yang diinput adalah enter
         inputEnter(cursor);
     }else if (x == 8) { // kondisi karakter yang diinput adalah backspace
         deleteHuruf(cursor, outHuruf);
+    }else if (x == 19) {
+        selectHuruf(cursor, jumlahSelect); // kondisi karakter yang diinput adalah CTRL + A
+        cout << "--------" <<endl;
+        cout << "activeKata firstHuruf: " << activeKata -> firstHuruf -> info << endl;
+        cout << "activeKata lastHuruf: " << activeKata -> lastHuruf -> info << endl;
+        setColor(7,0);
+
+        x = _getch();
+        system("cls");
+        if (x == 3){
+            //copyHuruf(cursor, jumlahSelect);
+        }else if (x == 12){
+            characterToLowercase(cursor, jumlahSelect);
+        }else if (x == 21){
+            characterToUppercase(cursor, jumlahSelect);
+        }else{
+            inputHandler(cursor, x);
+        }
     }else if (x == 0 || x == -32){ // kondisi karakter yang diinput adalah arrow
         x = _getch();
         if (x == 75){ // kondisi karakter yang diinput adalah arrow left
@@ -207,7 +226,7 @@ void inputHandler(adrHuruf &cursor, char x){
         }else if (x == 80){
             moveCursorDown(cursor); // kondisi karakter yang diinput adalah arrow down
         }
-    }else{ // kondisi karakter yang diinput adalah huruf, angka, dan simbol
+    }else if (x != 12 && x != 21){ // kondisi karakter yang diinput adalah huruf, angka, dan simbol
         inputHuruf(cursor, x);
     }
 }
@@ -584,6 +603,7 @@ void insertAfterKata(adrKata inKata, adrKata prec){
         prec -> next = inKata;
     }
 }
+
 void insertLastKata(adrKata inKata){
 //{I.S terdefinisi sebuah elemen kata yang tidak kosong
 // F.S membuat elemen kata baru sebagai kata terakhir pada active baris.}
@@ -690,11 +710,12 @@ void insertFirstBaris(adrBaris inBaris){
         Line.first = inBaris;
     }
 }
+
 void insertAfterBaris(adrBaris inBaris, adrBaris prec){
 //{I.S terdefinisi sebuah elemen baris.
 // F.S elemen baris dimasukkan setelah prec ke List Line.}
     if (prec != nullptr){
-        if (activeBaris == Line.last){
+        if (prec == Line.last){
             insertLastBaris(inBaris);
         }else{
             inBaris -> next = prec -> next;
@@ -705,6 +726,7 @@ void insertAfterBaris(adrBaris inBaris, adrBaris prec){
     }
 
 }
+
 void insertLastBaris(adrBaris inBaris){
 //{I.S terdefinisi sebuah elemen baris.
 // F.S elemen baris dimasukkan sebagai elemen terakhir ke List Line.}
@@ -774,6 +796,55 @@ void deleteLastBaris(adrBaris &outBaris){
     }
 }
 
+void characterToUppercase(adrHuruf cursor, int jumlahSelect){
+//{I.S terdefinisi sebuah elemen kursor yang tidak kosong dan jumlah karakter yang diseleksi setelah kursor
+// F.S mengubah karakter lowercase menjadi uppercase sesuai dengan jumlah karakter yang telah diseleksi.}
+    adrKata counterKata;
+    adrHuruf counterHuruf;
+    int i = 0;
+    cout << jumlahSelect;
+    counterKata = activeKata;
+    counterHuruf = cursor->next;
+    while (counterKata != nullptr && i<jumlahSelect){
+        if (counterKata != activeKata){
+            counterHuruf = counterKata->firstHuruf;
+        }
+        while (counterHuruf != nullptr && i<jumlahSelect){
+            if (counterHuruf->info >= 'a' && counterHuruf->info <= 'z'){
+                counterHuruf->info = counterHuruf->info - 32;
+            }
+            i++;
+            counterHuruf = counterHuruf->next;
+        }
+        counterKata = counterKata->next;
+    }
+}
+
+void characterToLowercase(adrHuruf cursor, int jumlahSelect){
+//{I.S terdefinisi sebuah elemen kursor yang tidak kosong dan jumlah karakter yang diseleksi setelah kursor
+// F.S mengubah karakter uppercase menjadi lowercase sesuai dengan jumlah karakter yang telah diseleksi.}
+    adrKata counterKata;
+    adrHuruf counterHuruf;
+    int i = 0;
+
+    counterKata = activeKata;
+    counterHuruf = cursor->next;
+    while (counterKata != nullptr && i<jumlahSelect){
+        if (counterKata != activeKata){
+            counterHuruf = counterKata->firstHuruf;
+        }
+        while (counterHuruf != nullptr && i<jumlahSelect){
+            if (counterHuruf->info >= 'A' && counterHuruf->info <= 'Z'){
+                counterHuruf->info = counterHuruf->info + 32;
+            }
+            i++;
+            counterHuruf = counterHuruf->next;
+        }
+        counterKata = counterKata->next;
+    }
+}
+
+
 void keteranganText(){
 //{Menampilkan keseluruhan teks editor.}
     int jumlahKata = 0;
@@ -824,16 +895,13 @@ void displayKata() {
             while (tempKata != nullptr){
                 tempHuruf = tempKata->firstHuruf;
                 while (tempHuruf != nullptr){
-                    setColor(15,6);
                     if(tempHuruf -> info == '|'){
-                        setColor(7,0);
                     }
                     cout << tempHuruf->info;
                     tempHuruf = tempHuruf->next;
                 }
                 tempKata = tempKata->next;
             }
-            setColor(7,0);
             cout << endl;
             tempLine = tempLine->next;
         }
@@ -841,9 +909,87 @@ void displayKata() {
 }
 
 void setColor(int textColor, int bgColor){
+// {Mengubah warna teks dan latar belakang teks sesuai parameter.}
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole,
                             (bgColor << 4) | textColor);
     // setColor(15,6) -> highlight kuning.
     // setColor(7,0) -> reset ke biasa.
 }
+
+void selectHuruf(adrHuruf cursor, int &jumlahSelect){
+//{I.S terdefinisi sebuah elemen kursor yang tidak kosong
+// F.S menyeleksi beberapa karakter pada baris sesuai input dari user.}
+    bool start = false;
+    int i;
+
+    cout << "Jumlah Huruf yang ingin di Select (Setelah Cursor): ";
+    cin >> jumlahSelect;
+    system("cls");
+    cout << "Teks: " << endl;
+    if (Line.first == nullptr) {
+        cout << "Tidak ada kata." << endl;
+    }else{
+        adrBaris tempLine;
+        adrKata tempKata;
+        adrHuruf tempHuruf;
+        tempLine = Line.first;
+        while (tempLine != nullptr){
+            tempKata = tempLine->firstKata;
+            while (tempKata != nullptr){
+                tempHuruf = tempKata->firstHuruf;
+                while (tempHuruf != nullptr){
+                    if (tempLine != activeBaris){
+                        start = false;
+                    }
+                    if (tempHuruf -> info == '|'){
+                        start = true;
+                        i = 0;
+                    }
+                    if (i<=jumlahSelect && start){
+                        if (i == 0){
+                            setColor(7,0);
+                        }else{
+                            setColor(15,6);
+                        }
+                        i = i + 1;
+                    }else{
+                        setColor(7,0);
+                    }
+                    cout << tempHuruf->info;
+                    tempHuruf = tempHuruf->next;
+                }
+                tempKata = tempKata->next;
+            }
+            cout << endl;
+            tempLine = tempLine->next;
+        }
+    }
+    jumlahSelect = i-1;
+    setColor(7,0);
+    cout << endl;
+}
+
+//void copyHuruf(adrHuruf cursor, int jumlahSelect){
+//    adrBaris tempActiveBaris = activeBaris;
+//    adrKata tempActiveKata = activeKata;
+//    adrHuruf tempCursor = Clipboard -> firstKata ->firstHuruf;
+//
+//    activeBaris = Clipboard;
+//    activeKata = Clipboard -> firstKata;
+//
+//    adrHuruf counterHuruf;
+//    int i =0;
+//    counterHuruf = cursor;
+//    while(i < jumlahSelect && counterHuruf != activeBaris -> lastKata -> lastHuruf){
+//        counterHuruf = counterHuruf -> next;
+//        inputHuruf(tempCursor, counterHuruf ->info);
+//        i++;
+//    }
+//    if(counterHuruf == tempActiveBaris -> lastKata -> lastHuruf){
+//        inputHuruf(tempCursor, counterHuruf ->info);
+//    }
+//    deleteCursor(tempCursor);
+//    activeBaris = tempActiveBaris;
+//    activeKata = tempActiveKata;
+//}
