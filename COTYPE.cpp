@@ -424,12 +424,15 @@ void inputHuruf(adrHuruf &cursor, char x) {
 
     if (cursor == activeBaris -> firstKata -> firstHuruf){ // kondisi kursor merupakan elemen pertama pada baris dan kata
         insertFirstHuruf(inHuruf);
-//        if (cursor->next != nullptr){
-//            moveCursorToRight(cursor);
-//            adrHuruf outHuruf;
-//            deleteHuruf(cursor, outHuruf);
-//            inputSpace(cursor, 32);
-//        }
+        if (cursor->next != nullptr){
+            if (cursor->next->info == ' '){
+                moveCursorToRight(cursor);
+                adrHuruf outHuruf;
+                deleteHuruf(cursor, outHuruf);
+                inputSpace(cursor, 32);
+                moveCursorToLeft(cursor);
+            }
+        }
     }else if(activeKata -> firstHuruf -> info == ' ' && activeKata -> next == nullptr){ // kondisi kursor berada setelah space dan tidak ada kata selanjutnya
         deleteCursor(cursor);
         adrKata newKata;
