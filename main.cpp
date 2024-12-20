@@ -10,8 +10,8 @@ int main(){
     Line.first = B;
     Line.last = B;
     kataPertama = createElemKata();
-    B -> firstKata = kataPertama;
-    B -> lastKata = kataPertama;
+    B->firstKata = kataPertama;
+    B->lastKata = kataPertama;
 
     cursor = createElemHuruf('|');
     kataPertama->firstHuruf = cursor;
@@ -21,13 +21,13 @@ int main(){
 
     Clipboard = createElemBaris();
     adrKata tempKata = createElemKata();
-    Clipboard ->firstKata = tempKata;
-    Clipboard ->lastKata = tempKata;
+    Clipboard->firstKata = tempKata;
+    Clipboard->lastKata = tempKata;
 
-    adrHuruf tempCursor = createElemHuruf('|');
-    Clipboard ->firstKata->firstHuruf = tempCursor;
-    Clipboard ->firstKata->lastHuruf = tempCursor;
-
+    undoStack = createStack();
+    redoStack = createStack();
+    insertElementStack(undoStack);
+    Opening();
     char ch;
     while (1) {
         if (_kbhit()) {  // memeriksa apakah tombol sudah ditekan
@@ -36,24 +36,32 @@ int main(){
             if (ch == 27) {  // kondisi jika ESC ditekan
                 break;  // keluar dari loop jika ESC ditekan
             } else {
-                if (ch == 19){
+                if (ch == 19 || ch == 9){
                     system("cls");
+                }
+                if (ch == 32 || ch == 13){
+                    insertElementStack(undoStack);
+                    clearStack(redoStack);
                 }
                 inputHandler(cursor, ch);  // menangani input selain ESC
             }
-
             // clear layar dan menampilkan teks yang diperbarui
             system("cls");
-            cout << "Teks: " << endl;
+            cout << "+===================================================+" << endl;
+            cout << "|                TEXT EDITOR COTYPE--               |" << endl;
+            cout << "+===================================================+" << endl;
             displayKata();
 
-            cout << "--------" <<endl;
-            cout << "activeKata firstHuruf: " << activeKata -> firstHuruf -> info << endl;
-            cout << "activeKata lastHuruf: " << activeKata -> lastHuruf -> info << endl;
+            keteranganText();
             setColor(7,0);
         }
     }
-    keteranganText();
-    cout << Clipboard->firstKata->firstHuruf->info<<endl;
-    cout << Clipboard ->firstKata->lastHuruf->info<<endl;
+    system("cls");
+    cout << "+===================================================+" << endl;
+    cout << "|           TERIMA KASIH TELAH MENGGUNAKAN          |" << endl;
+    cout << "|                TEXT EDITOR COTYPE--               |" << endl;
+    cout << "|                        ^^                         |" << endl;
+    cout << "+===================================================+" << endl;
+
+    return 0;
 }

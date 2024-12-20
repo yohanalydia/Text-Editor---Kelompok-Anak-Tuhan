@@ -1,10 +1,17 @@
 #ifndef TUBES_H_INCLUDED
 #define TUBES_H_INCLUDED
-#include <conio.h>
-// library conio.h digunakan untuk manipulasi terminal
-#include <windows.h>
-#include <cstdlib>
 #include <iostream>
+
+// library conio.h menyediakan fungsi untuk input/output berbasis karakter
+#include <conio.h>
+// library windows.h menyediakan fungsi untuk berinteraksi dengan sistem operasi windows
+#include <windows.h>
+// library cstdlib menyediakan fungsi untuk operasi umum seperti eksekusi perintah sistem
+#include <cstdlib>
+
+// library untuk fungsi Search
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -36,15 +43,38 @@ struct Baris{
     adrBaris first, last; // Menyimpan pointer baris pertama dan terakhir
 };
 
+// Membuat struct Stack
+struct Stack{
+    Baris info[10];
+    int top;
+};
+
+// Mendeklarasikan fungsi primitives Stack
+Stack createStack();
+bool isFull(Stack S);
+bool isEmpty(Stack S);
+void push(Stack &S, Baris B);
+void pop(Stack &S, Baris &outBaris);
+void clearStack(Stack &S);
+
 // Mendeklarasikan variabel global activeKata
 extern adrKata activeKata;
 // Mendeklarasikan variabel global activeBaris
 extern adrBaris activeBaris;
 // Mendeklarasikan variabel global Line
 extern Baris Line;
-
+// Mendeklarasikan variabel global Clipboard
 extern adrBaris Clipboard;
+// Mendeklarasikan variabel global listKata yang merupakan vector (array dinamis)
+extern vector<adrKata> listKata;
+// Mendeklarasikan variabel global undoStack dan redoStack
+extern Stack undoStack;
+extern Stack redoStack;
 
+// Mendeklarasikan prosedur untuk menampilkan halaman pembuka pada COTYPE--
+void Opening();
+// Mendeklarasikan prosedur untuk menampilkan List Shortcut yang dapat digunakan
+void Menu();
 
 // Mendeklarasikan primitives create
 Baris createBaris();
@@ -58,7 +88,7 @@ void inputSpace(adrHuruf &cursor, char x);
 void inputEnter(adrHuruf &cursor);
 
 // Mendeklarasikan prosedur terkait insert dan delete huruf
-void inputHuruf(adrHuruf &cursor, char x);
+void inputHuruf(adrHuruf &cursor, char);
 void insertFirstHuruf(adrHuruf inHuruf);
 void insertAfterHuruf(adrHuruf inHuruf, adrHuruf prec);
 void insertLastHuruf(adrHuruf inHuruf);
@@ -102,13 +132,31 @@ void characterToLowercase(adrHuruf cursor, int jumlahSelect);
 void selectHuruf(adrHuruf cursor, int &jumlahSelect);
 // Mendeklarasikan prosedur untuk menyalin karakter yang sudah diseleksi
 void copyHuruf(adrHuruf cursor, int jumlahSelect);
+// Mendeklarasikan prosedur untuk menempelkan (paste) karakter yang sudah dicopy ke clipboard
+void pasteHuruf(adrBaris Clipboard, adrHuruf &cursor);
+// Mendeklarasikan prosedur untuk memotong karakter yang sudah diseleksi
+void cutHuruf(adrHuruf &cursor, int jumlahSelect);
+// Mendeklarasikan prosedur untuk mencari kata yang diinput oleh user
+void searchWord();
+
 // Mendeklarasikan prosedur untuk menampilkan keterangan dari keseluruhan teks
 void keteranganText();
 // Mendeklarasikan prosedur untuk menampilkan keseluruhan teks
 void displayKata();
 // Mendeklarasikan prosedur untuk mengubah warna teks dan latar belakang teks
 void setColor(int textColor, int bgColor);
+// Mendeklarasikan prosedur untuk menampilkan sebuah kata pada seluruh teks
+void printKata(adrKata inKata);
+// Mendeklarasikan prosedur untuk menghitung jumlah huruf pada sebuah kata
+int lengthKata(adrKata inKata);
+// Mendeklarasikan prosedur untuk mengganti kata setelah di search dengan suatu kata spesifik
+void replaceWord(adrHuruf &cursor);
 
+// Mendeklarasikan prosedur untuk membatalkan perubahan yang telah dilakukan sebelumnya
+void undo(adrHuruf &cursor);
+// Mendeklarasikan prosedur untuk mengembalikan perubahan yang telah dibatalkan oleh prosedur undo
+void redo(adrHuruf &cursor);
 
-
+// Mendeklarasikan prosedur untuk memasukkan elemen ke dalam Stack
+void insertElementStack(Stack &S);
 #endif // TUBES_H_INCLUDED
