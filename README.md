@@ -1,12 +1,15 @@
-# Text-Editor---Kelompok-Anak-Tuhan
+# Text-Editor_Kelompok-Anak-Tuhan
 
-PANDUAN TEXT EDITOR COTYPE--
+**PANDUAN TEXT EDITOR COTYPE--**
+
 Disusun oleh:
+
 Kelompok Anak Tuhan
-Julian Sudiyanto	103052300045
-Yohana Lydia	103052330068
+
+Julian Sudiyanto - 103052300045 | Yohana Lydia - 103052330068
 
 **Deskripsi Proyek**
+
 COTYPE-- merupakan sebuah text editor yang dibangun berdasarkan console application. COTYPE-- bekerja dengan cara menerima input secara langsung dari keyboard pengguna kemudian memprosesnya berdasarkan fungsi-fungsi terkait. Dalam merancang text editor ini, penulis mengimplementasikan dua struktur data utama, yaitu Doubly Linked List dan Multi Linked List. Selain itu, penulis juga memanfaatkan  penggunaan struktur data Stack dalam pembuatan fitur Undo dan Redo.
 
 **Fitur Utama**
@@ -67,8 +70,8 @@ Fitur ini akan menghitung jumlah huruf, jumlah kata, dan jumlah baris pada kesel
 19.	Display Kata 
 Fitur Display Kata dapat menampilkan seluruh karakter yang telah ditambahkan ke dalam text editor. Tampilan disusun dari baris paling atas ke bawah, serta dari kiri ke kanan. Fitur ini akan langsung ditampilkan tanpa perlu dipanggil.
 
-Instruksi Instalasi dan Penggunaan
-1. Unduh File `.cbp
-2. Ekstrak: Jika file `.cbp` terkompresi dalam zip.
-3. Jalankan Program
-
+**Instruksi Instalasi dan Penggunaan**
+1. Unduh seluruh kode program sebagai zip.
+2. Ekstrak file yang telah diunduh.
+3. Buka file COTYPE.cbp
+4. Jalankan program.
